@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Game.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tictactoe</a> &gt; <a href="index.source.html" class="el_package">com.maryiasidaruk.tictactoe</a> &gt; <span class="el_source">Game.java</span></div><h1>Game.java</h1><pre class="source lang-java linenums">package com.maryiasidaruk.tictactoe;
+
+import com.maryiasidaruk.tictactoe.board.Board;
+import com.maryiasidaruk.tictactoe.player.Player;
+import com.maryiasidaruk.tictactoe.player.PlayerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+class Game {
+
+    private static final String PLAYER_MARK_ON_MESSAGE = &quot;%s:&quot;;
+    private static final String ONE_MORE_TURN = &quot;Please check and enter valid x and y coordinate.&quot;;
+    private static final String FULL_BOARD_MESSAGE = &quot;GAME ENDS WITH A DRAW&quot;;
+    private static final String WINNER_MESSAGE = &quot;%s WON!&quot;;
+
+    private Board board;
+    private GameConditions gameConditions;
+
+    private List&lt;Player&gt; players;
+<span class="fc" id="L23">    private int step = 0;</span>
+
+    @Autowired
+<span class="fc" id="L26">    Game(Board board, PlayerFactory playerFactory, GameConditions gameConditions) {</span>
+<span class="fc" id="L27">        this.board = board;</span>
+<span class="fc" id="L28">        this.gameConditions = gameConditions;</span>
+<span class="fc" id="L29">        this.players = playerFactory.createPlayers();</span>
+<span class="fc" id="L30">    }</span>
+
+    public void createBoard(){
+<span class="fc" id="L33">        System.out.println(&quot;Game Board Creation...&quot;);</span>
+<span class="fc" id="L34">        System.out.println(board);</span>
+<span class="fc" id="L35">        System.out.println(&quot;Board created.&quot;);</span>
+<span class="fc" id="L36">    }</span>
+
+    boolean play() {
+<span class="fc" id="L39">        System.out.println(String.format(PLAYER_MARK_ON_MESSAGE, this.getCurrentPlayer().getName()));</span>
+        try {
+<span class="fc" id="L41">            makeTurn();</span>
+<span class="fc" id="L42">            Thread.sleep(2000);</span>
+<span class="fc" id="L43">        } catch (Exception e) {</span>
+<span class="fc" id="L44">            System.out.println(e.getMessage() + ONE_MORE_TURN);</span>
+<span class="fc" id="L45">            System.out.println(board);</span>
+<span class="fc" id="L46">            return true;</span>
+<span class="fc" id="L47">        }</span>
+
+<span class="fc" id="L49">        System.out.println(board);</span>
+<span class="fc" id="L50">        boolean isGameContinued = isGameContinued();</span>
+<span class="fc" id="L51">        step++;</span>
+<span class="fc" id="L52">        return isGameContinued;</span>
+    }
+
+    private void makeTurn() {
+<span class="fc" id="L56">        int[] position = this.getCurrentPlayer().getNextPosition(board);</span>
+<span class="fc" id="L57">        board.markCell(</span>
+                position[0],
+                position[1],
+<span class="fc" id="L60">                this.getCurrentPlayer().getCharacter()</span>
+        );
+<span class="fc" id="L62">    }</span>
+
+    Player getCurrentPlayer() {
+<span class="fc" id="L65">        return players.get(step % players.size());</span>
+    }
+
+    private boolean isGameContinued() {
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (hasWinner()) {</span>
+<span class="fc" id="L70">            System.out.println(String.format(WINNER_MESSAGE, this.getCurrentPlayer().getName()));</span>
+<span class="fc" id="L71">            return false;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        } else if (isBoardFull()) {</span>
+<span class="fc" id="L73">            System.out.println(FULL_BOARD_MESSAGE);</span>
+<span class="fc" id="L74">            return false;</span>
+        }
+<span class="fc" id="L76">        return true;</span>
+    }
+
+    private boolean isBoardFull() {
+<span class="fc" id="L80">        return board.isFull();</span>
+    }
+
+    private boolean hasWinner() {
+<span class="fc" id="L84">        return gameConditions.hasWinner(this.board);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Game.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tictactoe</a> &gt; <a href="index.source.html" class="el_package">com.maryiasidaruk.tictactoe.game</a> &gt; <span class="el_source">Game.java</span></div><h1>Game.java</h1><pre class="source lang-java linenums">package com.maryiasidaruk.tictactoe.game;
+
+import com.maryiasidaruk.tictactoe.board.Board;
+import com.maryiasidaruk.tictactoe.player.Player;
+import com.maryiasidaruk.tictactoe.player.PlayerFactory;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+<span class="pc bnc" id="L12" title="All 32 branches missed.">@Data</span>
+@Service
+public class Game {
+
+    private static final String PLAYER_MARK_ON_MESSAGE = &quot;%s:&quot;;
+    private static final String INVALID_COORDINATE_MSG = &quot;Please check and enter valid x and y coordinate.&quot;;
+    private static final String GAME_ENDS_WITH_A_DRAW_MSG = &quot;GAME ENDS WITH A DRAW&quot;;
+    private static final String PLAYER_WON_MSG = &quot;%s WON!&quot;;
+
+<span class="nc" id="L21">    private Board board;</span>
+<span class="nc" id="L22">    private GameConditions gameConditions;</span>
+
+<span class="nc" id="L24">    private List&lt;Player&gt; players;</span>
+<span class="pc" id="L25">    private int step = 0;</span>
+
+    @Autowired
+<span class="fc" id="L28">    Game(Board board, PlayerFactory playerFactory, GameConditions gameConditions) {</span>
+<span class="fc" id="L29">        this.board = board;</span>
+<span class="fc" id="L30">        this.gameConditions = gameConditions;</span>
+<span class="fc" id="L31">        this.players = playerFactory.createPlayers();</span>
+<span class="fc" id="L32">    }</span>
+
+    public void createBoard(){
+<span class="fc" id="L35">        System.out.println(&quot;Game Board Creation...&quot;);</span>
+<span class="fc" id="L36">        printBoard();</span>
+<span class="fc" id="L37">        System.out.println(&quot;Board created.&quot;);</span>
+<span class="fc" id="L38">    }</span>
+
+    public boolean play() {
+<span class="fc" id="L41">        System.out.println(String.format(PLAYER_MARK_ON_MESSAGE, this.getCurrentPlayer().getName()));</span>
+        try {
+<span class="fc" id="L43">            makeTurn();</span>
+<span class="fc" id="L44">            Thread.sleep(2000);</span>
+<span class="nc" id="L45">        } catch (Exception e) {</span>
+<span class="nc" id="L46">            System.out.println(e.getMessage() + INVALID_COORDINATE_MSG);</span>
+<span class="nc" id="L47">            printBoard();</span>
+<span class="nc" id="L48">            return true;</span>
+<span class="fc" id="L49">        }</span>
+
+<span class="fc" id="L51">        printBoard();</span>
+<span class="fc" id="L52">        boolean isGameContinued = isGameContinued();</span>
+<span class="fc" id="L53">        step++;</span>
+<span class="fc" id="L54">        return isGameContinued;</span>
+    }
+
+    private void printBoard() {
+<span class="fc" id="L58">        System.out.println(board);</span>
+<span class="fc" id="L59">    }</span>
+
+    private void makeTurn() {
+<span class="fc" id="L62">        int[] position = this.getCurrentPlayer().getNextPosition(board);</span>
+<span class="fc" id="L63">        board.markCell(</span>
+                position[0],
+                position[1],
+<span class="fc" id="L66">                this.getCurrentPlayer().getCharacter()</span>
+        );
+<span class="fc" id="L68">    }</span>
+
+    Player getCurrentPlayer() {
+<span class="fc" id="L71">        return players.get(step % players.size());</span>
+    }
+
+    boolean isGameContinued() {
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (hasWinner()) {</span>
+<span class="fc" id="L76">            System.out.println(String.format(PLAYER_WON_MSG, this.getCurrentPlayer().getName()));</span>
+<span class="fc" id="L77">            return false;</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        } else if (isBoardFull()) {</span>
+<span class="fc" id="L79">            System.out.println(GAME_ENDS_WITH_A_DRAW_MSG);</span>
+<span class="fc" id="L80">            return false;</span>
+        }
+<span class="fc" id="L82">        return true;</span>
+    }
+
+    private boolean isBoardFull() {
+<span class="fc" id="L86">        return board.isFull();</span>
+    }
+
+    private boolean hasWinner() {
+<span class="fc" id="L90">        return gameConditions.hasWinner(board);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
