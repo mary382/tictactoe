@@ -1,7 +1,6 @@
 package com.maryiasidaruk.tictactoe.game;
 
 import com.maryiasidaruk.tictactoe.board.Board;
-import com.maryiasidaruk.tictactoe.game.GameConditions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertFalse;

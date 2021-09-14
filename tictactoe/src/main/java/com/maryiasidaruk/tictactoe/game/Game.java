@@ -31,12 +31,20 @@ public class Game {
         this.players = playerFactory.createPlayers();
     }
 
-    public void createBoard(){
+    /**
+     * Print start board to the console
+     */
+    public void createBoard() {
         System.out.println("Game Board Creation...");
         printBoard();
         System.out.println("Board created.");
     }
 
+    /**
+     * Method asks fot the move from the player and checks if the game should be continued.
+     *
+     * @return true if the game is continued, false - when board is full or somebody is win.
+     */
     public boolean play() {
         System.out.println(String.format(PLAYER_MARK_ON_MESSAGE, this.getCurrentPlayer().getName()));
         try {
@@ -58,6 +66,9 @@ public class Game {
         System.out.println(board);
     }
 
+    /**
+     * Mark a cell with the given character of the player.
+     */
     private void makeTurn() {
         int[] position = this.getCurrentPlayer().getNextPosition(board);
         board.markCell(
@@ -67,10 +78,18 @@ public class Game {
         );
     }
 
+    /**
+     * @return player who moves at the given step.
+     */
     Player getCurrentPlayer() {
         return players.get(step % players.size());
     }
 
+    /**
+     * Checks is game is not ended yet.
+     *
+     * @return true if game is not finished, false when board has no empty cells or player1/player2 is win.
+     */
     boolean isGameContinued() {
         if (hasWinner()) {
             System.out.println(String.format(PLAYER_WON_MSG, this.getCurrentPlayer().getName()));

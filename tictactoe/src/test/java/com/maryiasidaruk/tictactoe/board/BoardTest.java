@@ -3,15 +3,11 @@ package com.maryiasidaruk.tictactoe.board;
 import com.maryiasidaruk.tictactoe.exception.InvalidPositionException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardTest {
 
@@ -105,19 +101,19 @@ public class BoardTest {
     }
 
     @Test
-    public void shouldReturnTrue_whenIsValidPosition_givenPosition2(){
+    public void shouldReturnTrue_whenIsValidPosition_givenPosition2() {
         int givenPosition = 2;
         assertTrue(board.isValidPosition(givenPosition));
     }
 
     @Test
-    public void shouldReturnFalse_whenIsValidPosition_givenPositionBiggerThanBoardSize(){
+    public void shouldReturnFalse_whenIsValidPosition_givenPositionBiggerThanBoardSize() {
         int givenPosition = 4;
         assertFalse(board.isValidPosition(givenPosition));
     }
 
     @Test
-    public void shouldReturnFalse_whenIsValidPosition_givenPositionSmallerThanZero(){
+    public void shouldReturnFalse_whenIsValidPosition_givenPositionSmallerThanZero() {
         int givenPosition = -1;
         assertFalse(board.isValidPosition(givenPosition));
     }

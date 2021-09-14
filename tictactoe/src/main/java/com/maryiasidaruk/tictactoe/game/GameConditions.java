@@ -7,6 +7,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class GameConditions {
 
+    /**
+     * Checks if there is a win on the board.<br>
+     * Rules to win:
+     * <ul>
+     *     <li>All elements in a row are one type chars</li>
+     *     <li>All elements in a column are one type chars</li>
+     *     <li>All elements in a diagonal are one type chars</li>
+     * </ul>
+     *
+     * @param board
+     * @return
+     */
     public boolean hasWinner(Board board) {
         return isColumnFull(board)
                 || this.isRowFull(board)

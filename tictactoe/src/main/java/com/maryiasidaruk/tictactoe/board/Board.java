@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+/**
+ * The board of tic-tac-toe.
+ */
 @Data
 @Component
 public class Board {
@@ -20,6 +23,11 @@ public class Board {
         initializeCells();
     }
 
+    /**
+     * Create board will all empty cells.
+     *
+     * @return empty cells
+     */
     Cell[][] initializeCells() {
         for (int x = 0; x < cells.length; x++) {
             for (int y = 0; y < cells.length; y++) {
@@ -37,12 +45,24 @@ public class Board {
         return cells[x][y];
     }
 
+    /**
+     * Checks is there are no empty cells on the board.
+     *
+     * @return true if board has no empty cells
+     */
     public boolean isFull() {
         return Arrays.stream(cells)
                 .flatMap(Arrays::stream)
                 .noneMatch(Cell::isEmpty);
     }
 
+    /**
+     * Set given character to the cell with the position [x,y].
+     *
+     * @param x - x coordinate of the position to mark
+     * @param y - y coordinate of the position to mark
+     * @param c - char to set to the cell
+     */
     public void markCell(int x, int y, char c) {
         if (isValidPosition(x) && isValidPosition(y) && cells[x][y].isEmpty()) {
             cells[x][y].setCharacter(c);
@@ -51,6 +71,12 @@ public class Board {
         }
     }
 
+    /**
+     * Checks is position between 0 and size of the board.
+     *
+     * @param position - x or y coordinate
+     * @return true if boardSize >=position >=0
+     */
     boolean isValidPosition(int position) {
         return position >= 0 && position <= cells.length;
     }
